@@ -1,20 +1,68 @@
-// Your styles go here
-body {
-  background: #202020 url('/images/footer-bg.jpg') repeat;
-  min-width: 1200px;
-  margin: 0;
-  padding: 0;
+// Henry Nelson 
+
+// nav.scss
+@import "/src/stylesheets/nav.scss";
+
+// color variables 
+
+$lightest-color:#FFF; 
+$lighter-color:#ddd;
+$darkest-color:#000000;
+$dar-color:#303030;
+$darker-color:rgba(0,0,0,.1);
+$dark-color:rgba(0,0,0,.2);
+$darkgrey-color:#333;
+$ldarkgrey-color:rgba(255,255,255,.4);
+$mgrey-color:rgba(255,255,255,.5);
+$lgrey-color:rgba(255,255,255,.7);
+$blue-color:#0d6efd;
+
+
+// mixins 
+
+$mar:0;
+$pad:0;
+
+@mixin marpad {
+  margin:$mar;
+  padding:$pad;
 }
 
-body,
-input,
-textarea,
-select {
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 300;
-  font-size: 11pt;
-  line-height: 1.75em;
+$dis:block;
+$wid:100%;
+
+@mixin diswid {
+    display: $dis;
+    width: $wid;
 }
+
+$pos:relative;
+$fon:0.8em;
+
+@mixin posfon {
+  position: $pos;
+  font-size: $fon;
+}
+
+
+body {
+  background: $dar-color url('/images/footer-bg.jpg') repeat; 
+  min-width: 1200px;
+  @include marpad;
+
+    &, 
+    input,
+    textarea,
+    select {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 11pt;
+      line-height: 1.75em;
+    }
+
+}
+
+//headings
 
 h1,
 h2,
@@ -25,22 +73,19 @@ h6 {
   letter-spacing: 1px;
   text-transform: uppercase;
   font-weight: 300;
-}
 
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
-  color: inherit;
-  text-decoration: none;
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+
 }
 
 strong,
 b {
   font-weight: bold;
-  color: #000000;
+  color: $darkest-color; 
 }
 
 em,
@@ -49,24 +94,22 @@ i {
 }
 
 a {
-  color: #0d6efd;
+  color: $blue-color; 
 }
 
 sub {
-  position: relative;
+  @include posfon;
   top: 0.5em;
-  font-size: 0.8em;
 }
 
 sup {
-  position: relative;
+  @include posfon;
   top: -0.5em;
-  font-size: 0.8em;
 }
 
 hr {
   border: 0;
-  border-top: solid 1px #ddd;
+  border-top: solid 1px $lighter-color; 
 }
 
 p,
@@ -77,41 +120,40 @@ table {
   margin-bottom: 1em;
 }
 
+
+// header 
+
 header {
   margin-bottom: 2em;
   line-height: 1.7em;
+
+  &h2 {
+    font-size: 2.5em;
+  }
+  
+  &.byline {
+    display: $dis;
+    margin: 0.5em 0 0 0;
+    padding: 0 0 0.5em 0;
+    text-transform: uppercase;
+    font-size: 1.4em;
+  }
+
 }
 
-header h2 {
-  font-size: 2.5em;
-}
-
-header .byline {
-  display: block;
-  margin: 0.5em 0 0 0;
-  padding: 0 0 0.5em 0;
-  text-transform: uppercase;
-  font-size: 1.4em;
-}
+// section & article
 
 section,
 article {
   margin-bottom: 3em;
-}
 
-section > :last-child,
-article > :last-child {
-  margin-bottom: 0;
-}
-
-section:last-child,
-article:last-child {
-  margin-bottom: 0;
+    &:last-child {
+      margin-bottom: $mar;
+    }
 }
 
 blockquote {
-  margin: 0;
-  padding: 0;
+  @include marpad;
   border: none;
   font-style: normal;
 }
@@ -120,207 +162,180 @@ footer {
   margin-top: 1em;
 }
 
+// container
+
 .container {
   width: 1200px;
   margin-left: auto;
   margin-right: auto;
+
+    &.small {
+      width: 900px;
+    }
+
+    &.big {
+      width: 100%;
+      max-width: 1500px;
+      min-width: 1200px;
+    }
+
 }
 
-.container.small {
-  width: 900px;
-}
+// row
 
-.container.big {
-  width: 100%;
-  max-width: 1500px;
-  min-width: 1200px;
-}
-
-.row section,
-.row article {
-  margin-bottom: 0;
-}
-
-.row [class*='column-'] {
-  padding: 50px 0 0 50px;
-  float: left;
-  box-sizing: border-box;
-}
-
-.row {
+.row { /* I'm not sure what was meant by 
+  "For example, the styles for .row and .container 
+  can be nested in one rule." because it doesn't seem like they're connected.*/
   margin-left: -50px;
+
+    &[class*='column-'] {
+      padding: 50px 0 0 50px;
+      float: left;
+      box-sizing: border-box;
+    }
+
+    &section,
+    &article {
+    margin-bottom: $mar;
+   }
+
+    &:after {
+      content: '';
+      display: $dis;
+      clear: both;
+      height: 0;
+    }
+
 }
 
-.row:after {
-  content: '';
-  display: block;
-  clear: both;
-  height: 0;
+// column
+
+/* Made a For-loop that assigns all the columns a width of 100% */ 
+
+$width: 100%;
+
+@for $make-column from 1 through 12 {
+  .column:nth-child(#{$make-column}) {
+    width:$width;
+  }
 }
 
-.column-1,
-.column-2,
-.column-3,
-.column-4,
-.column-5,
-.column-6,
-.column-7.column-8,
-.column-9,
-.column-10,
-.column-11,
-.column-12 {
-  width: 100%;
-}
 
 @media all and (min-width: 576px) {
-  .column-1 {
-    width: 8.33333%;
-  }
 
-  .column-2 {
-    width: 16.66667%;
-  }
+/* Made a map list and assigned values of each column to each value! */
 
-  .column-3 {
-    width: 25%;
-  }
-
-  .column-4 {
-    width: 33.33333%;
-  }
-
-  .column-5 {
-    width: 41.66667%;
-  }
-
-  .column-6 {
-    width: 50%;
-  }
-
-  .column-7 {
-    width: 58.33333%;
-  }
-
-  .column-8 {
-    width: 66.66667%;
-  }
-
-  .column-9 {
-    width: 75%;
-  }
-
-  .column-10 {
-    width: 83.33333%;
-  }
-
-  .column-11 {
-    width: 91.66667%;
-  }
-
-  .column-12 {
-    width: 100%;
-  }
+  $columnwidths:("1":8.33333%,
+  "2":16.66667%,"3":25%,"4":33.33333%,"5":41.66667%,"6":50%,"7":58.33333%,"8":66.66667%,"9":75%,"10":83.33333%,"11":91.66667%,"12":100%);
+   
+ @each $kind, $width in $columnwidths {
+   .column-#{$kind} {
+     width:$width;
+   }
+ }
 }
+
+// image 
 
 .image {
   display: inline-block;
+
+    &img {
+      @include diswid;
+    }
+
+    &.featured {
+      @include diswid;
+      margin: 0 0 2em 0;
+    }
+
+    &.full {
+      @include diswid;
+      margin-bottom: 2em;
+    }
+
+    &.left {
+      float: left;
+      margin: 0 2em 2em 0;
+    }
+
+    &.centered { /* nesting inside of nesting */ 
+      display: $dis;
+      margin: 0 0 2em 0;
+
+      &img {
+        margin: $mar auto;
+        width: auto;
+      }
+    }
 }
 
-.image img {
-  display: block;
-  width: 100%;
-}
-
-.image.featured {
-  display: block;
-  width: 100%;
-  margin: 0 0 2em 0;
-}
-
-.image.full {
-  display: block;
-  width: 100%;
-  margin-bottom: 2em;
-}
-
-.image.left {
-  float: left;
-  margin: 0 2em 2em 0;
-}
-
-.image.centered {
-  display: block;
-  margin: 0 0 2em 0;
-}
-
-.image.centered img {
-  margin: 0 auto;
-  width: auto;
-}
+// unordered list 
 
 ul.default {
-  margin: 0;
-  padding: 0;
+  @include marpad;
   list-style: none;
+
+  &li { /* nesting inside of nesting */
+    display: $dis;
+    padding: 2em 0em 1.25em 0em;
+    border-top: 1px solid $dar-color;
+
+    &:first-child {
+      padding-top: 0em;
+      border-top: none;
+    }
 }
 
-ul.default li {
-  display: block;
-  padding: 2em 0em 1.25em 0em;
-  border-top: 1px solid #303030;
-}
+  &a { /* nesting inside of nesting */
+    text-decoration: none;
+    color: $mgrey-color; 
 
-ul.default li:first-child {
-  padding-top: 0em;
-  border-top: none;
-}
-
-ul.default a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, .5);
-}
-
-ul.default a:hover {
-  text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 ul.style1 {
-  margin: 0;
-  padding: 0;
+  @include marpad;
   list-style: none;
-}
 
-ul.style1 li {
-  padding: 0.60em 0em;
-  border-top: 1px solid;
-  border-color: rgba(0, 0, 0, .1);
-}
+  &li { /* nesting inside of nesting */ 
+    padding: 0.60em 0em;
+    border-top: 1px solid;
+    border-color: $darker-color;
+  
 
-ul.style1 li:first-child {
-  padding-top: 0;
-  border-top: 0;
+    &:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
 }
 
 ul.style2 {
-  margin: 0;
-  padding: 0;
+  @include marpad;
   list-style: none;
-}
 
-ul.style2 li {
-  padding: 1.90em 0em 1.60em 0em;
-  border-top: 1px solid;
-  border-color: rgba(0, 0, 0, .1);
-}
+  &li { /* nesting inside of nesting */
+    padding: 1.90em 0em 1.60em 0em;
+    border-top: 1px solid;
+    border-color: $darker-color; 
+  
 
-ul.style2 li:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
 
-ul.style2 img {
-  float: left;
-  padding-right: 1em;
+      }
+
+      &img {
+    float: left;
+    padding-right: 1em;
+  }
+
 }
 
 ul.style5 {
@@ -328,167 +343,153 @@ ul.style5 {
   margin: 0em 0em 1em 0em;
   padding: 0em;
   list-style: none;
+
+  &li {
+    float: left;
+    padding: 0.25em 0.25em;
+    line-height: 0;
+  }
+
 }
 
-ul.style5 li {
-  float: left;
-  padding: 0.25em 0.25em;
-  line-height: 0;
-}
+// button
 
-.button {
-  position: relative;
+@mixin buttonmixin {
+  position: $pos;
   display: inline-block;
   margin-top: 0.5em;
   padding: 0.50em 1.5em;
-  background: #0d6efd;
+  background: $blue-color; 
   border-radius: 6px;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 1.1em;
-  color: #FFF;
+  color: $lightest-color;
   transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
   cursor: pointer;
+
 }
 
-.button:hover {
-  background: #0d6efd;
-  color: #FFF !important;
+.button {
+  @include buttonmixin();
+
+  &:hover {
+    @include buttonmixin();
+    background: $blue-color;
+    color: $lightest-color !important; 
+  }
+
 }
+
+// header
 
 .header {
-  position: relative;
-  background: #FFF;
-}
+  position: $pos;
+  background: $lightest-color; 
 
-.header .container {
-  position: relative;
-  padding: 4em 0em;
+
+  &.container {
+    position: $pos;
+    padding: 4em 0em;
+  }
+
 }
 
 .logo {
   position: absolute;
   left: 0em;
   top: 3em;
+
+  &a {
+    display: $dis;
+    text-decoration: none;
+    font-size: 2.8em;
+    font-weight: 600;
+  }
+
 }
 
-.logo a {
-  display: block;
-  text-decoration: none;
-  font-size: 2.8em;
-  font-weight: 600;
-}
-
-.nav {
-  position: absolute;
-  right: 0em;
-  top: 2.2em;
-}
-
-.nav ul {
-  list-style-type: none;
-}
-
-.nav ul li {
-  float: left;
-}
-
-.nav ul li:last-child {
-  padding-right: 0;
-}
-
-.nav ul li a,
-.nav ul li span {
-  display: block;
-  margin-left: 0.7em;
-  padding: 0.80em 1.2em;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 1.1em;
-  outline: 0;
-  color: #333;
-}
-
-.nav li.active a {
-  background: #0d6efd;
-  border-radius: 5px;
-  color: #FFF;
-}
-
-.banner {
-  position: relative;
+.banner { /* Not sure why this is covering all of nav.*/ 
+  position: $pos;
   padding: 12em 0em;
   background: url('/images/banner.jpg') no-repeat center;
-  background-size: cover;
-  color: #fff;
+  background-size:cover;
+  color: $lightest-color; 
 }
 
 .page {
-  position: relative;
-  background: #fff;
+  position: $pos;
+  background: $lightest-color; 
 }
 
 .main {
   border-top: 1px solid;
-  border-color: rgba(0, 0, 0, .2);
+  border-color: $dark-color; 
 }
 
 .sidebar header h2 {
   font-size: 1.6em;
 }
 
-.footer {
-  position: relative;
-  color: rgba(255, 255, 255, .4);
-}
+// footer 
 
-.footer h2 {
+.footer {
+  position: $pos;
+  color: $ldarkgrey-color 
+
+  &h2 {
   padding-bottom: 1.5em;
   font-size: 1.6em;
-  color: #FFF;
-}
+  color: $lightest-color;} 
 
-.footer strong {
-  color: rgba(255, 255, 255, .7);
+  &strong {
+  color: $lgrey-color;} 
 }
 
 .copyright {
-  position: relative;
+  position: $pos;
   padding: 3em 0em;
-  border-top: 1px solid #303030;
+  border-top: 1px solid $dar-color; 
   letter-spacing: 1px;
   text-align: center;
-  color: rgba(255, 255, 255, .4);
+  color: $ldarkgrey-color;
+
+  &a {
+  text-decoration: none;
+  color: $ldarkgrey-color !important; 
 }
 
-.copyright a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, .4) !important;
 }
 
 .marketing {
-  position: relative;
-}
+  position: $pos;
 
-.marketing header h2 {
+
+  &header h2 {
   font-size: 1.6em;
 }
 
+}
+
+// featured 
+
 .featured {
-  position: relative;
+  position: $pos;
+
+&.divider {
+  border-bottom: 1px solid $dar-color; 
 }
 
-.featured .divider {
-  border-bottom: 1px solid #303030;
-}
-
-.featured .box {
-  background: #FFF;
+&.box {
+  background: $lightest-color; 
   padding: 1.4em;
   font-size: 0.95em;
   border-radius: 5px;
 }
+
+}
+
+// balloon
 
 .balloon {
   padding: 1.87em;
@@ -496,13 +497,15 @@ ul.style5 li {
   border-radius: 5px;
   line-height: 180%;
   font-size: 1.2em;
-  color: #333;
-}
+  color: $darkgrey-color; 
 
-.ballon-bgbtm {
+
+.balloon-bgbtm {
   height: 1.87em;
 }
 
-.balloon strong {
-  color: #333 !important;
+&strong {
+  color: $darkgrey-color !important; 
+}
+
 }
