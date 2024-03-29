@@ -1,7 +1,7 @@
 // Henry Nelson 
 
 // nav.scss
-@import "/src/stylesheets/nav.scss";
+@import "src/stylesheets/nav.scss";
 
 // color variables 
 
@@ -11,7 +11,7 @@ $darkest-color:#000000;
 $dar-color:#303030;
 $darker-color:rgba(0,0,0,.1);
 $dark-color:rgba(0,0,0,.2);
-$darkgrey-color:#333;
+$darkgrey-color:#333333;
 $ldarkgrey-color:rgba(255,255,255,.4);
 $mgrey-color:rgba(255,255,255,.5);
 $lgrey-color:rgba(255,255,255,.7);
@@ -497,7 +497,7 @@ ul.style5 {
   border-radius: 5px;
   line-height: 180%;
   font-size: 1.2em;
-  color: $darkgrey-color; 
+  color:$darkgrey-color; 
 
 
 .balloon-bgbtm {
@@ -505,7 +505,7 @@ ul.style5 {
 }
 
 &strong {
-  color: $darkgrey-color !important; 
+  color:$darkgrey-color !important; 
 }
 
 }
